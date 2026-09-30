@@ -17,7 +17,7 @@ const socials = [
   },
   {
     name: "LinkedIn",
-    href: "https://www.linkedin.com/in/rohit-kushwah-3512b0301/",
+    href: "https://www.linkedin.com/in/rohitsingh-ai",
     icon: FiLinkedin,
   },
   {
