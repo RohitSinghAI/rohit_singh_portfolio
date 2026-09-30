@@ -12,7 +12,7 @@ import Background from "../ui/Background";
 const socials = [
   {
     name: "GitHub",
-    href: "https://github.com/Rohit-kushwah69",
+    href: "https://github.com/rohitsinghai",
     icon: FiGithub,
   },
   {
