@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue } from "framer-motion";
 import { FiArrowUpRight } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -11,18 +11,17 @@ export default function Projects() {
 
   const [activeProject, setActiveProject] = useState(null);
 
-  const [mousePosition, setMousePosition] = useState({
-    x: 0,
-    y: 0,
-  });
+  // Motion values do NOT cause React re-render
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-  /* ==========================================
-      BACK TO PROJECTS SCROLL
-  ========================================== */
+  // ------------------------------------------
+  // Back to projects scroll
+  // ------------------------------------------
 
   useEffect(() => {
     if (window.location.hash === "#projects") {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         document
           .getElementById("projects")
           ?.scrollIntoView({
@@ -30,23 +29,23 @@ export default function Projects() {
             block: "start",
           });
       }, 100);
+
+      return () => clearTimeout(timer);
     }
   }, []);
 
-  /* ==========================================
-      MOUSE MOVE
-  ========================================== */
+  // ------------------------------------------
+  // Optimized mouse movement
+  // ------------------------------------------
 
   const handleMouseMove = (e) => {
-    setMousePosition({
-      x: e.clientX,
-      y: e.clientY,
-    });
+    mouseX.set(e.clientX + 20);
+    mouseY.set(e.clientY - 110);
   };
 
-  /* ==========================================
-      OPEN PROJECT
-  ========================================== */
+  // ------------------------------------------
+  // Open project
+  // ------------------------------------------
 
   const handleProjectClick = (project) => {
     navigate(`/projects/${project.id}`);
@@ -67,16 +66,14 @@ export default function Projects() {
       "
       onMouseMove={handleMouseMove}
     >
-
       {/* ==========================================
           BACKGROUND
       ========================================== */}
 
       <Background />
 
-
       {/* ==========================================
-          GRID
+          LIGHTWEIGHT GRID
       ========================================== */}
 
       <div
@@ -84,12 +81,11 @@ export default function Projects() {
           absolute
           inset-0
           pointer-events-none
-          opacity-[0.012]
+          opacity-[0.01]
           bg-[linear-gradient(rgba(255,255,255,.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.5)_1px,transparent_1px)]
           bg-[size:100px_100px]
         "
       />
-
 
       {/* ==========================================
           VIGNETTE
@@ -100,13 +96,12 @@ export default function Projects() {
           absolute
           inset-0
           pointer-events-none
-          bg-[radial-gradient(circle_at_center,transparent_20%,#070707_92%)]
+          bg-[radial-gradient(circle_at_center,transparent_25%,#070707_92%)]
         "
       />
 
-
       {/* ==========================================
-          FLOATING CURSOR IMAGE
+          DESKTOP CURSOR IMAGE
       ========================================== */}
 
       <AnimatePresence>
@@ -114,20 +109,22 @@ export default function Projects() {
           <motion.div
             initial={{
               opacity: 0,
-              scale: 0.8,
-              rotate: -5,
+              scale: 0.94,
             }}
             animate={{
               opacity: 1,
               scale: 1,
-              rotate: 0,
             }}
             exit={{
               opacity: 0,
-              scale: 0.8,
+              scale: 0.94,
             }}
             transition={{
-              duration: 0.25,
+              duration: 0.18,
+            }}
+            style={{
+              left: mouseX,
+              top: mouseY,
             }}
             className="
               fixed
@@ -135,34 +132,23 @@ export default function Projects() {
               hidden
               lg:block
               pointer-events-none
-              w-[330px]
-              h-[220px]
+              w-[300px]
+              h-[200px]
               overflow-hidden
-              rounded-[22px]
+              rounded-[20px]
               border
               border-white/10
               bg-[#0b0b0d]
-              shadow-[0_30px_100px_rgba(0,0,0,.7)]
+              shadow-[0_20px_60px_rgba(0,0,0,.6)]
+              will-change-transform
             "
-            style={{
-              left: mousePosition.x + 20,
-              top: mousePosition.y - 110,
-            }}
           >
-
-            <motion.img
+            <img
               key={activeProject.image}
               src={activeProject.image}
               alt={activeProject.title}
-              initial={{
-                scale: 1.15,
-              }}
-              animate={{
-                scale: 1,
-              }}
-              transition={{
-                duration: 0.5,
-              }}
+              loading="eager"
+              decoding="async"
               className="
                 w-full
                 h-full
@@ -170,7 +156,7 @@ export default function Projects() {
               "
             />
 
-            {/* Image Overlay */}
+            {/* Overlay */}
 
             <div
               className="
@@ -183,21 +169,20 @@ export default function Projects() {
               "
             />
 
-            {/* Image Info */}
+            {/* Info */}
 
             <div
               className="
                 absolute
-                left-5
-                right-5
-                bottom-4
+                left-4
+                right-4
+                bottom-3
                 flex
                 items-center
                 justify-between
                 font-['Space_Grotesk']
               "
             >
-
               <span
                 className="
                   text-[8px]
@@ -219,13 +204,10 @@ export default function Projects() {
               >
                 {activeProject.year}
               </span>
-
             </div>
-
           </motion.div>
         )}
       </AnimatePresence>
-
 
       {/* ==========================================
           MAIN
@@ -242,7 +224,6 @@ export default function Projects() {
           lg:px-12
         "
       >
-
         {/* ==========================================
             HEADER
         ========================================== */}
@@ -255,15 +236,13 @@ export default function Projects() {
             items-end
           "
         >
-
           <div>
-
-            {/* Selected Work */}
+            {/* Label */}
 
             <motion.div
               initial={{
                 opacity: 0,
-                x: -20,
+                x: -15,
               }}
               whileInView={{
                 opacity: 1,
@@ -271,9 +250,10 @@ export default function Projects() {
               }}
               viewport={{
                 once: true,
+                amount: 0.2,
               }}
               transition={{
-                duration: 0.6,
+                duration: 0.4,
               }}
               className="
                 flex
@@ -286,7 +266,6 @@ export default function Projects() {
                 text-violet-400
               "
             >
-
               <span
                 className="
                   w-8
@@ -296,16 +275,14 @@ export default function Projects() {
               />
 
               Selected Work
-
             </motion.div>
-
 
             {/* Heading */}
 
             <motion.h2
               initial={{
                 opacity: 0,
-                y: 50,
+                y: 25,
               }}
               whileInView={{
                 opacity: 1,
@@ -313,9 +290,10 @@ export default function Projects() {
               }}
               viewport={{
                 once: true,
+                amount: 0.2,
               }}
               transition={{
-                duration: 0.9,
+                duration: 0.5,
               }}
               className="
                 mt-6
@@ -329,24 +307,20 @@ export default function Projects() {
                 tracking-[-7px]
               "
             >
-
               WORK
 
               <span className="text-white/20">
                 {" "}LAB.
               </span>
-
             </motion.h2>
-
           </div>
-
 
           {/* Description */}
 
           <motion.p
             initial={{
               opacity: 0,
-              y: 20,
+              y: 15,
             }}
             whileInView={{
               opacity: 1,
@@ -354,9 +328,10 @@ export default function Projects() {
             }}
             viewport={{
               once: true,
+              amount: 0.2,
             }}
             transition={{
-              delay: 0.2,
+              duration: 0.4,
             }}
             className="
               max-w-sm
@@ -370,9 +345,7 @@ export default function Projects() {
             intelligent systems built around data,
             technology and curiosity.
           </motion.p>
-
         </div>
-
 
         {/* ==========================================
             HEADER LINE
@@ -386,43 +359,33 @@ export default function Projects() {
           "
         />
 
-
         {/* ==========================================
             PROJECT LIST
         ========================================== */}
 
         <div className="mt-8">
-
           {projects.map((project, index) => (
-
             <motion.div
               key={project.id}
-
               initial={{
                 opacity: 0,
-                y: 25,
+                y: 15,
               }}
-
               whileInView={{
                 opacity: 1,
                 y: 0,
               }}
-
               viewport={{
                 once: true,
+                amount: 0.05,
               }}
-
               transition={{
-                duration: 0.6,
-                delay: index * 0.05,
+                duration: 0.4,
+                delay: Math.min(index * 0.03, 0.15),
               }}
-
               onMouseEnter={() => setActiveProject(project)}
-
               onMouseLeave={() => setActiveProject(null)}
-
               onClick={() => handleProjectClick(project)}
-
               className="
                 group
                 relative
@@ -431,6 +394,9 @@ export default function Projects() {
                 border-white/[0.06]
               "
             >
+              {/* ==================================
+                  PROJECT ROW
+              ================================== */}
 
               <div
                 className="
@@ -445,10 +411,7 @@ export default function Projects() {
                   lg:gap-10
                 "
               >
-
-                {/* ==================================
-                    NUMBER
-                ================================== */}
+                {/* Number */}
 
                 <div
                   className="
@@ -463,18 +426,15 @@ export default function Projects() {
                     text-gray-700
                     group-hover:text-violet-400
                     transition-colors
+                    duration-200
                   "
                 >
                   {String(index + 1).padStart(2, "0")}
                 </div>
 
-
-                {/* ==================================
-                    TITLE
-                ================================== */}
+                {/* Title + Meta */}
 
                 <div className="flex-1 min-w-0">
-
                   <h3
                     className="
                       font-['Space_Grotesk']
@@ -487,18 +447,13 @@ export default function Projects() {
                       truncate
                       text-gray-300
                       group-hover:text-white
-                      group-hover:translate-x-2
-                      transition-all
-                      duration-500
+                      group-hover:translate-x-1
+                      transition
+                      duration-200
                     "
                   >
                     {project.title}
                   </h3>
-
-
-                  {/* ==================================
-                      META
-                  ================================== */}
 
                   <div
                     className="
@@ -516,7 +471,6 @@ export default function Projects() {
                       text-gray-700
                     "
                   >
-
                     <span>
                       {project.category}
                     </span>
@@ -535,23 +489,15 @@ export default function Projects() {
 
                     <span className="hidden sm:block">
                       {project.tech
-                        .slice(0, 3)
+                        ?.slice(0, 3)
                         .join(" · ")}
                     </span>
-
                   </div>
-
                 </div>
 
+                {/* Arrow */}
 
-                {/* ==================================
-                    ARROW
-                ================================== */}
-
-                <motion.div
-                  whileHover={{
-                    rotate: 45,
-                  }}
+                <div
                   className="
                     shrink-0
                     w-10
@@ -568,17 +514,14 @@ export default function Projects() {
                     group-hover:border-violet-400/40
                     group-hover:bg-violet-400
                     group-hover:text-black
-                    transition-all
-                    duration-400
+                    group-hover:rotate-12
+                    transition
+                    duration-200
                   "
                 >
-
                   <FiArrowUpRight size={18} />
-
-                </motion.div>
-
+                </div>
               </div>
-
 
               {/* ==================================
                   MOBILE IMAGE
@@ -589,33 +532,29 @@ export default function Projects() {
                   lg:hidden
                   h-0
                   overflow-hidden
-                  group-hover:h-[210px]
-                  transition-all
-                  duration-500
+                  group-hover:h-[190px]
+                  transition-[height]
+                  duration-300
                 "
               >
-
                 <img
                   src={project.image}
                   alt={project.title}
+                  loading="lazy"
+                  decoding="async"
                   className="
                     w-full
                     h-full
                     object-cover
-                    rounded-[20px]
+                    rounded-[18px]
                   "
                 />
-
               </div>
-
             </motion.div>
-
           ))}
-
         </div>
-
       </div>
-
     </section>
   );
 }
+

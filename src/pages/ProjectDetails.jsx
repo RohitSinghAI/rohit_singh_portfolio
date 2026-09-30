@@ -21,69 +21,27 @@ export default function ProjectDetails() {
     (item) => String(item.id) === String(id)
   );
 
-  /* ==========================================
-     PAGE TOP ON OPEN
-  ========================================== */
-
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "instant",
-    });
+    window.scrollTo(0, 0);
   }, [id]);
 
-  /* ==========================================
-     PROJECT NOT FOUND
-  ========================================== */
+  // ==========================================
+  // PROJECT NOT FOUND
+  // ==========================================
 
   if (!project) {
     return (
       <main className="min-h-screen bg-[#050505] text-white flex items-center justify-center px-6">
-
         <div className="text-center">
-
-          <div
-            className="
-              mx-auto
-              w-16
-              h-16
-              rounded-full
-              border
-              border-violet-400/20
-              bg-violet-400/[0.04]
-              flex
-              items-center
-              justify-center
-              text-violet-300
-              font-['Space_Grotesk']
-            "
-          >
+          <div className="mx-auto w-16 h-16 rounded-full border border-violet-400/20 bg-violet-400/[0.04] flex items-center justify-center text-violet-300 font-['Space_Grotesk']">
             404
           </div>
 
-          <p
-            className="
-              mt-7
-              font-['Space_Grotesk']
-              text-[9px]
-              uppercase
-              tracking-[5px]
-              text-violet-400
-            "
-          >
+          <p className="mt-7 font-['Space_Grotesk'] text-[9px] uppercase tracking-[5px] text-violet-400">
             Project
           </p>
 
-          <h1
-            className="
-              mt-4
-              font-['Space_Grotesk']
-              text-4xl
-              sm:text-6xl
-              font-semibold
-              tracking-[-4px]
-            "
-          >
+          <h1 className="mt-4 font-['Space_Grotesk'] text-4xl sm:text-6xl font-semibold tracking-[-4px]">
             Project Not Found
           </h1>
 
@@ -103,16 +61,13 @@ export default function ProjectDetails() {
               text-xs
               font-semibold
               hover:bg-gray-200
-              transition
+              transition-colors
             "
           >
             <FiArrowLeft size={14} />
-
             Back to Projects
           </button>
-
         </div>
-
       </main>
     );
   }
@@ -129,14 +84,13 @@ export default function ProjectDetails() {
         sm:py-10
       "
     >
-
       {/* ==========================================
           BACKGROUND
       ========================================== */}
 
       <Background />
 
-      {/* Main glow */}
+      {/* Lightweight glow */}
 
       <div
         className="
@@ -144,27 +98,11 @@ export default function ProjectDetails() {
           left-1/2
           top-[8%]
           -translate-x-1/2
-          w-[700px]
-          h-[500px]
+          w-[450px]
+          h-[300px]
           rounded-full
-          bg-violet-600/[0.035]
-          blur-[150px]
-          pointer-events-none
-        "
-      />
-
-      {/* Right glow */}
-
-      <div
-        className="
-          absolute
-          right-[-200px]
-          top-[35%]
-          w-[500px]
-          h-[500px]
-          rounded-full
-          bg-indigo-500/[0.025]
-          blur-[150px]
+          bg-violet-600/[0.025]
+          blur-[90px]
           pointer-events-none
         "
       />
@@ -176,46 +114,11 @@ export default function ProjectDetails() {
           absolute
           inset-0
           pointer-events-none
-          opacity-[0.012]
-          bg-[linear-gradient(rgba(255,255,255,.6)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.6)_1px,transparent_1px)]
+          opacity-[0.01]
+          bg-[linear-gradient(rgba(255,255,255,.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.5)_1px,transparent_1px)]
           bg-[size:100px_100px]
         "
       />
-
-      {/* ==========================================
-          HUGE BACKGROUND TEXT
-      ========================================== */}
-
-      <div
-        className="
-          absolute
-          top-[35%]
-          left-1/2
-          -translate-x-1/2
-          pointer-events-none
-          select-none
-          whitespace-nowrap
-        "
-      >
-
-        <span
-          className="
-            font-['Space_Grotesk']
-            font-bold
-            text-[150px]
-            sm:text-[230px]
-            md:text-[320px]
-            lg:text-[420px]
-            leading-none
-            tracking-[-25px]
-            text-white/[0.012]
-          "
-        >
-          ROHIT
-        </span>
-
-      </div>
-
 
       {/* ==========================================
           MAIN CONTAINER
@@ -227,7 +130,7 @@ export default function ProjectDetails() {
           z-10
           max-w-7xl
           mx-auto
-          px-6
+          px-5
           sm:px-8
           lg:px-12
         "
@@ -240,14 +143,14 @@ export default function ProjectDetails() {
         <motion.div
           initial={{
             opacity: 0,
-            y: -20,
+            y: -10,
           }}
           animate={{
             opacity: 1,
             y: 0,
           }}
           transition={{
-            duration: 0.7,
+            duration: 0.35,
           }}
           className="
             flex
@@ -258,16 +161,7 @@ export default function ProjectDetails() {
             pb-5
           "
         >
-
-          {/* BACK TO PROJECTS */}
-
-          <motion.button
-            whileHover={{
-              x: -4,
-            }}
-            whileTap={{
-              scale: 0.96,
-            }}
+          <button
             onClick={() => navigate("/#projects")}
             className="
               group
@@ -283,7 +177,6 @@ export default function ProjectDetails() {
               transition-colors
             "
           >
-
             <span
               className="
                 flex
@@ -296,19 +189,14 @@ export default function ProjectDetails() {
                 border-white/[0.08]
                 bg-white/[0.015]
                 group-hover:border-violet-400/30
-                group-hover:bg-violet-400/[0.04]
-                transition-all
+                transition-colors
               "
             >
               <FiArrowLeft size={14} />
             </span>
 
             Back to Projects
-
-          </motion.button>
-
-
-          {/* PROJECT NUMBER */}
+          </button>
 
           <div
             className="
@@ -322,7 +210,6 @@ export default function ProjectDetails() {
               text-gray-700
             "
           >
-
             <span className="hidden sm:block">
               Selected Work
             </span>
@@ -334,514 +221,444 @@ export default function ProjectDetails() {
             <span>
               {String(project.id).padStart(2, "0")}
             </span>
-
           </div>
-
         </motion.div>
 
-
         {/* =================================================
-            PHOTO + VIDEO
-            FIRST THING USER SEES
+            FULL WIDTH IMAGE
         ================================================= */}
 
-        <div
-          className="
-            grid
-            grid-cols-1
-            lg:grid-cols-2
-            gap-6
-            lg:gap-8
-            mt-10
-            sm:mt-14
-          "
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.45,
+          }}
+          className="mt-10 sm:mt-14"
         >
-
-          {/* ========================================
-              PHOTO CARD
-          ======================================== */}
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              x: -40,
-            }}
-            animate={{
-              opacity: 1,
-              x: 0,
-            }}
-            transition={{
-              duration: 0.8,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="group"
+          <div
+            className="
+              group
+              relative
+              overflow-hidden
+              rounded-[24px]
+              sm:rounded-[30px]
+              border
+              border-white/[0.08]
+              bg-[#0a0a0c]
+              p-2
+              hover:border-violet-400/20
+              transition-colors
+            "
           >
-
             <div
               className="
                 relative
                 overflow-hidden
-                rounded-[30px]
-                border
-                border-white/[0.08]
-                bg-[#0a0a0c]
-                p-2
-                shadow-[0_25px_80px_rgba(0,0,0,0.35)]
-                transition-all
-                duration-500
-                group-hover:border-violet-400/20
-                group-hover:shadow-[0_30px_100px_rgba(124,58,237,0.10)]
+                rounded-[18px]
+                sm:rounded-[24px]
+                w-full
+                h-[55vh]
+                min-h-[400px]
+                sm:h-[70vh]
+                lg:h-[82vh]
+                bg-black
               "
             >
+              <img
+                src={project.image}
+                alt={project.title}
+                loading="eager"
+                decoding="async"
+                className="
+                  w-full
+                  h-full
+                  object-contain
+                  bg-black
+                  transition-transform
+                  duration-700
+                  group-hover:scale-[1.015]
+                "
+              />
+
+              {/* Image overlay */}
 
               <div
                 className="
-                  relative
-                  overflow-hidden
-                  rounded-[24px]
-                  h-[380px]
-                  sm:h-[470px]
-                  lg:h-[520px]
+                  absolute
+                  inset-0
+                  pointer-events-none
+                  bg-gradient-to-t
+                  from-black/70
+                  via-transparent
+                  to-black/10
+                "
+              />
+
+              {/* Badge */}
+
+              <div
+                className="
+                  absolute
+                  top-5
+                  left-5
+                  flex
+                  items-center
+                  gap-2.5
+                  px-4
+                  py-2.5
+                  rounded-full
+                  border
+                  border-white/10
+                  bg-black/50
                 "
               >
-
-                {/* IMAGE */}
-
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="
-                    w-full
-                    h-full
-                    object-cover
-                    transition-transform
-                    duration-[1400ms]
-                    group-hover:scale-[1.045]
-                  "
-                />
-
-                {/* DARK OVERLAY */}
-
-                <div
-                  className="
-                    absolute
-                    inset-0
-                    bg-gradient-to-t
-                    from-black/85
-                    via-black/10
-                    to-black/20
-                    pointer-events-none
-                  "
-                />
-
-                {/* BADGE */}
-
-                <div
-                  className="
-                    absolute
-                    top-5
-                    left-5
-                    flex
-                    items-center
-                    gap-2.5
-                    px-4
-                    py-2.5
-                    rounded-full
-                    border
-                    border-white/10
-                    bg-black/40
-                    backdrop-blur-xl
-                  "
-                >
-
-                  <span
-                    className="
-                      w-1.5
-                      h-1.5
-                      rounded-full
-                      bg-violet-400
-                      shadow-[0_0_10px_rgba(167,139,250,0.8)]
-                    "
-                  />
-
-                  <span
-                    className="
-                      font-['Space_Grotesk']
-                      text-[8px]
-                      uppercase
-                      tracking-[3px]
-                      text-white/70
-                    "
-                  >
-                    Project Visual
-                  </span>
-
-                </div>
-
-
-                {/* NUMBER */}
-
                 <span
                   className="
-                    absolute
-                    top-6
-                    right-6
-                    font-['Space_Grotesk']
-                    text-[9px]
-                    tracking-[3px]
-                    text-white/40
+                    w-1.5
+                    h-1.5
+                    rounded-full
+                    bg-violet-400
                   "
-                >
-                  01
-                </span>
+                />
 
-
-                {/* IMAGE TITLE */}
-
-                <div
-                  className="
-                    absolute
-                    left-6
-                    right-6
-                    bottom-6
-                  "
-                >
-
-                  <p
-                    className="
-                      font-['Space_Grotesk']
-                      text-[8px]
-                      uppercase
-                      tracking-[3px]
-                      text-white/40
-                    "
-                  >
-                    Visual Preview
-                  </p>
-
-                  <h2
-                    className="
-                      mt-2
-                      font-['Space_Grotesk']
-                      text-xl
-                      sm:text-2xl
-                      font-medium
-                    "
-                  >
-                    {project.title}
-                  </h2>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            {/* LIVE PROJECT */}
-
-            <motion.a
-              href={project.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{
-                y: -3,
-              }}
-              whileTap={{
-                scale: 0.98,
-              }}
-              className="
-                group/button
-                mt-4
-                flex
-                items-center
-                justify-between
-                w-full
-                rounded-2xl
-                border
-                border-white/[0.08]
-                bg-[#0a0a0c]
-                px-5
-                py-4
-                hover:border-violet-400/30
-                hover:bg-violet-400/[0.035]
-                transition-all
-              "
-            >
-
-              <div>
-
-                <p
+                <span
                   className="
                     font-['Space_Grotesk']
                     text-[8px]
                     uppercase
                     tracking-[3px]
-                    text-gray-600
+                    text-white/70
                   "
                 >
-                  Explore
-                </p>
-
-                <span
-                  className="
-                    block
-                    mt-1
-                    font-['Space_Grotesk']
-                    text-xs
-                    text-gray-300
-                    group-hover/button:text-white
-                    transition-colors
-                  "
-                >
-                  Visit Live Project
+                  Project Visual
                 </span>
-
               </div>
 
+              {/* Number */}
 
               <span
                 className="
-                  flex
-                  items-center
-                  justify-center
-                  w-9
-                  h-9
-                  rounded-full
-                  border
-                  border-white/[0.08]
-                  text-gray-500
-                  group-hover/button:text-violet-300
-                  group-hover/button:border-violet-400/30
-                  transition-all
+                  absolute
+                  top-6
+                  right-6
+                  font-['Space_Grotesk']
+                  text-[9px]
+                  tracking-[3px]
+                  text-white/40
                 "
               >
-
-                <FiArrowUpRight size={15} />
-
+                01
               </span>
 
-            </motion.a>
-
-          </motion.div>
-
-
-          {/* ========================================
-              VIDEO CARD
-          ======================================== */}
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              x: 40,
-            }}
-            animate={{
-              opacity: 1,
-              x: 0,
-            }}
-            transition={{
-              duration: 0.8,
-              delay: 0.1,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="group"
-          >
-
-            <div
-              className="
-                relative
-                overflow-hidden
-                rounded-[30px]
-                border
-                border-white/[0.08]
-                bg-[#0a0a0c]
-                p-2
-                shadow-[0_25px_80px_rgba(0,0,0,0.35)]
-                transition-all
-                duration-500
-                group-hover:border-violet-400/20
-                group-hover:shadow-[0_30px_100px_rgba(124,58,237,0.10)]
-              "
-            >
+              {/* Image title */}
 
               <div
                 className="
-                  relative
-                  overflow-hidden
-                  rounded-[24px]
-                  h-[380px]
-                  sm:h-[470px]
-                  lg:h-[520px]
-                  bg-black
+                  absolute
+                  left-6
+                  right-6
+                  bottom-6
                 "
               >
-
-                {/* VIDEO */}
-
-                <video
-                  controls
-                  playsInline
-                  preload="metadata"
-                  className="
-                    w-full
-                    h-full
-                    object-cover
-                  "
-                >
-
-                  <source
-                    src={project.video}
-                    type="video/mp4"
-                  />
-
-                  Your browser does not support video.
-
-                </video>
-
-
-                {/* VIDEO BADGE */}
-
-                <div
-                  className="
-                    absolute
-                    top-5
-                    left-5
-                    flex
-                    items-center
-                    gap-2.5
-                    px-4
-                    py-2.5
-                    rounded-full
-                    border
-                    border-white/10
-                    bg-black/40
-                    backdrop-blur-xl
-                    pointer-events-none
-                  "
-                >
-
-                  <span
-                    className="
-                      flex
-                      items-center
-                      justify-center
-                      w-5
-                      h-5
-                      rounded-full
-                      bg-violet-400/10
-                      text-violet-300
-                    "
-                  >
-                    <FiPlay size={9} />
-                  </span>
-
-                  <span
-                    className="
-                      font-['Space_Grotesk']
-                      text-[8px]
-                      uppercase
-                      tracking-[3px]
-                      text-white/70
-                    "
-                  >
-                    Project Demo
-                  </span>
-
-                </div>
-
-
-                {/* NUMBER */}
-
-                <span
-                  className="
-                    absolute
-                    top-6
-                    right-6
-                    font-['Space_Grotesk']
-                    text-[9px]
-                    tracking-[3px]
-                    text-white/40
-                    pointer-events-none
-                  "
-                >
-                  02
-                </span>
-
-              </div>
-
-            </div>
-
-
-            {/* VIDEO INFO */}
-
-            <div
-              className="
-                mt-4
-                flex
-                items-center
-                justify-between
-                rounded-2xl
-                border
-                border-white/[0.08]
-                bg-[#0a0a0c]
-                px-5
-                py-4
-              "
-            >
-
-              <div>
-
                 <p
                   className="
                     font-['Space_Grotesk']
                     text-[8px]
                     uppercase
                     tracking-[3px]
-                    text-gray-600
+                    text-white/40
                   "
                 >
-                  Experience
+                  Visual Preview
                 </p>
 
-                <p
+                <h2
                   className="
-                    mt-1
+                    mt-2
                     font-['Space_Grotesk']
-                    text-xs
-                    text-gray-300
+                    text-xl
+                    sm:text-2xl
+                    font-medium
                   "
                 >
-                  Watch the project in action
-                </p>
-
+                  {project.title}
+                </h2>
               </div>
+            </div>
+          </div>
 
+          {/* Live project */}
+
+          <a
+            href={project.live}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+              group
+              mt-4
+              flex
+              items-center
+              justify-between
+              w-full
+              rounded-2xl
+              border
+              border-white/[0.08]
+              bg-[#0a0a0c]
+              px-5
+              py-4
+              hover:border-violet-400/30
+              hover:bg-violet-400/[0.035]
+              transition-colors
+            "
+          >
+            <div>
+              <p
+                className="
+                  font-['Space_Grotesk']
+                  text-[8px]
+                  uppercase
+                  tracking-[3px]
+                  text-gray-600
+                "
+              >
+                Explore
+              </p>
+
+              <span
+                className="
+                  block
+                  mt-1
+                  font-['Space_Grotesk']
+                  text-xs
+                  text-gray-300
+                  group-hover:text-white
+                  transition-colors
+                "
+              >
+                Visit Live Project
+              </span>
+            </div>
+
+            <span
+              className="
+                flex
+                items-center
+                justify-center
+                w-9
+                h-9
+                rounded-full
+                border
+                border-white/[0.08]
+                text-gray-500
+                group-hover:text-violet-300
+                group-hover:border-violet-400/30
+                transition-colors
+              "
+            >
+              <FiArrowUpRight size={15} />
+            </span>
+          </a>
+        </motion.div>
+
+        {/* =================================================
+            FULL WIDTH VIDEO
+        ================================================= */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.45,
+            delay: 0.05,
+          }}
+          className="mt-8 sm:mt-10"
+        >
+          <div
+            className="
+              group
+              relative
+              overflow-hidden
+              rounded-[24px]
+              sm:rounded-[30px]
+              border
+              border-white/[0.08]
+              bg-[#0a0a0c]
+              p-2
+              hover:border-violet-400/20
+              transition-colors
+            "
+          >
+            <div
+              className="
+                relative
+                overflow-hidden
+                rounded-[18px]
+                sm:rounded-[24px]
+                w-full
+                h-[55vh]
+                min-h-[400px]
+                sm:h-[70vh]
+                lg:h-[82vh]
+                bg-black
+              "
+            >
+              <video
+                controls
+                playsInline
+                preload="metadata"
+                className="
+                  w-full
+                  h-full
+                  object-contain
+                  bg-black
+                "
+              >
+                <source
+                  src={project.video}
+                  type="video/mp4"
+                />
+
+                Your browser does not support video.
+              </video>
+
+              {/* Video badge */}
 
               <div
                 className="
+                  absolute
+                  top-5
+                  left-5
                   flex
                   items-center
-                  justify-center
-                  w-9
-                  h-9
+                  gap-2.5
+                  px-4
+                  py-2.5
                   rounded-full
-                  bg-violet-400/[0.08]
                   border
-                  border-violet-400/10
-                  text-violet-300
+                  border-white/10
+                  bg-black/50
+                  pointer-events-none
                 "
               >
+                <span
+                  className="
+                    flex
+                    items-center
+                    justify-center
+                    w-5
+                    h-5
+                    rounded-full
+                    bg-violet-400/10
+                    text-violet-300
+                  "
+                >
+                  <FiPlay size={9} />
+                </span>
 
-                <FiPlay size={12} />
-
+                <span
+                  className="
+                    font-['Space_Grotesk']
+                    text-[8px]
+                    uppercase
+                    tracking-[3px]
+                    text-white/70
+                  "
+                >
+                  Project Demo
+                </span>
               </div>
 
+              {/* Number */}
+
+              <span
+                className="
+                  absolute
+                  top-6
+                  right-6
+                  font-['Space_Grotesk']
+                  text-[9px]
+                  tracking-[3px]
+                  text-white/40
+                  pointer-events-none
+                "
+              >
+                02
+              </span>
+            </div>
+          </div>
+
+          {/* Video info */}
+
+          <div
+            className="
+              mt-4
+              flex
+              items-center
+              justify-between
+              rounded-2xl
+              border
+              border-white/[0.08]
+              bg-[#0a0a0c]
+              px-5
+              py-4
+            "
+          >
+            <div>
+              <p
+                className="
+                  font-['Space_Grotesk']
+                  text-[8px]
+                  uppercase
+                  tracking-[3px]
+                  text-gray-600
+                "
+              >
+                Experience
+              </p>
+
+              <p
+                className="
+                  mt-1
+                  font-['Space_Grotesk']
+                  text-xs
+                  text-gray-300
+                "
+              >
+                Watch the project in action
+              </p>
             </div>
 
-          </motion.div>
-
-        </div>
-
+            <div
+              className="
+                flex
+                items-center
+                justify-center
+                w-9
+                h-9
+                rounded-full
+                bg-violet-400/[0.08]
+                border
+                border-violet-400/10
+                text-violet-300
+              "
+            >
+              <FiPlay size={12} />
+            </div>
+          </div>
+        </motion.div>
 
         {/* =================================================
             PROJECT TITLE
@@ -850,15 +667,15 @@ export default function ProjectDetails() {
         <motion.div
           initial={{
             opacity: 0,
-            y: 35,
+            y: 20,
           }}
           animate={{
             opacity: 1,
             y: 0,
           }}
           transition={{
-            duration: 0.8,
-            delay: 0.25,
+            duration: 0.5,
+            delay: 0.1,
           }}
           className="
             pt-20
@@ -866,7 +683,6 @@ export default function ProjectDetails() {
             lg:pt-28
           "
         >
-
           <div
             className="
               flex
@@ -879,7 +695,6 @@ export default function ProjectDetails() {
               text-violet-400
             "
           >
-
             <span
               className="
                 w-10
@@ -889,9 +704,7 @@ export default function ProjectDetails() {
             />
 
             Digital Experience
-
           </div>
-
 
           <h1
             className="
@@ -907,15 +720,12 @@ export default function ProjectDetails() {
               tracking-[-7px]
             "
           >
-
             {project.title}
 
             <span className="text-violet-300/50">
               .
             </span>
-
           </h1>
-
 
           <div
             className="
@@ -927,7 +737,6 @@ export default function ProjectDetails() {
               gap-8
             "
           >
-
             <p
               className="
                 max-w-2xl
@@ -941,7 +750,6 @@ export default function ProjectDetails() {
               {project.description}
             </p>
 
-
             <div
               className="
                 flex
@@ -950,14 +758,12 @@ export default function ProjectDetails() {
                 shrink-0
               "
             >
-
               <span
                 className="
                   w-2
                   h-2
                   rounded-full
                   bg-violet-400
-                  shadow-[0_0_15px_rgba(167,139,250,0.8)]
                 "
               />
 
@@ -972,13 +778,9 @@ export default function ProjectDetails() {
               >
                 Available to Explore
               </span>
-
             </div>
-
           </div>
-
         </motion.div>
-
 
         {/* =================================================
             PROJECT DETAILS
@@ -987,7 +789,7 @@ export default function ProjectDetails() {
         <motion.div
           initial={{
             opacity: 0,
-            y: 30,
+            y: 20,
           }}
           whileInView={{
             opacity: 1,
@@ -995,42 +797,37 @@ export default function ProjectDetails() {
           }}
           viewport={{
             once: true,
+            amount: 0.1,
           }}
           transition={{
-            duration: 0.8,
+            duration: 0.4,
           }}
           className="mt-20 lg:mt-24"
         >
+          <p
+            className="
+              font-['Space_Grotesk']
+              text-[8px]
+              uppercase
+              tracking-[4px]
+              text-violet-400
+            "
+          >
+            03 / Overview
+          </p>
 
-          <div>
-
-            <p
-              className="
-                font-['Space_Grotesk']
-                text-[8px]
-                uppercase
-                tracking-[4px]
-                text-violet-400
-              "
-            >
-              03 / Overview
-            </p>
-
-            <h2
-              className="
-                mt-3
-                font-['Space_Grotesk']
-                text-3xl
-                sm:text-4xl
-                font-medium
-                tracking-[-2px]
-              "
-            >
-              Project details
-            </h2>
-
-          </div>
-
+          <h2
+            className="
+              mt-3
+              font-['Space_Grotesk']
+              text-3xl
+              sm:text-4xl
+              font-medium
+              tracking-[-2px]
+            "
+          >
+            Project details
+          </h2>
 
           <div
             className="
@@ -1045,7 +842,6 @@ export default function ProjectDetails() {
               bg-[#09090b]
             "
           >
-
             <Info
               label="Project"
               value={`#${String(project.id).padStart(2, "0")}`}
@@ -1066,11 +862,8 @@ export default function ProjectDetails() {
               value="Completed"
               active
             />
-
           </div>
-
         </motion.div>
-
 
         {/* =================================================
             TECHNOLOGIES
@@ -1079,7 +872,7 @@ export default function ProjectDetails() {
         <motion.div
           initial={{
             opacity: 0,
-            y: 30,
+            y: 20,
           }}
           whileInView={{
             opacity: 1,
@@ -1087,73 +880,42 @@ export default function ProjectDetails() {
           }}
           viewport={{
             once: true,
+            amount: 0.1,
           }}
           transition={{
-            duration: 0.8,
+            duration: 0.4,
           }}
           className="mt-20 lg:mt-24"
         >
-
-          <div>
-
-            <p
-              className="
-                font-['Space_Grotesk']
-                text-[8px]
-                uppercase
-                tracking-[4px]
-                text-violet-400
-              "
-            >
-              04 / Stack
-            </p>
-
-            <h2
-              className="
-                mt-3
-                font-['Space_Grotesk']
-                text-3xl
-                sm:text-4xl
-                font-medium
-                tracking-[-2px]
-              "
-            >
-              Built with.
-            </h2>
-
-          </div>
-
-
-          <div
+          <p
             className="
-              mt-8
-              flex
-              flex-wrap
-              gap-3
+              font-['Space_Grotesk']
+              text-[8px]
+              uppercase
+              tracking-[4px]
+              text-violet-400
             "
           >
+            04 / Stack
+          </p>
 
-            {project.tech.map((tech, index) => (
+          <h2
+            className="
+              mt-3
+              font-['Space_Grotesk']
+              text-3xl
+              sm:text-4xl
+              font-medium
+              tracking-[-2px]
+            "
+          >
+            Built with.
+          </h2>
 
-              <motion.div
+          <div className="mt-8 flex flex-wrap gap-3">
+            {project.tech.map((tech) => (
+              <div
                 key={tech}
-                initial={{
-                  opacity: 0,
-                  y: 12,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                viewport={{
-                  once: true,
-                }}
-                transition={{
-                  delay: index * 0.05,
-                }}
-                whileHover={{
-                  y: -4,
-                }}
                 className="
                   group
                   flex
@@ -1171,10 +933,9 @@ export default function ProjectDetails() {
                   hover:text-white
                   hover:border-violet-400/30
                   hover:bg-violet-400/[0.035]
-                  transition-all
+                  transition-colors
                 "
               >
-
                 <span
                   className="
                     w-1.5
@@ -1187,15 +948,10 @@ export default function ProjectDetails() {
                 />
 
                 {tech}
-
-              </motion.div>
-
+              </div>
             ))}
-
           </div>
-
         </motion.div>
-
 
         {/* =================================================
             CTA
@@ -1204,7 +960,7 @@ export default function ProjectDetails() {
         <motion.div
           initial={{
             opacity: 0,
-            y: 30,
+            y: 20,
           }}
           whileInView={{
             opacity: 1,
@@ -1212,9 +968,10 @@ export default function ProjectDetails() {
           }}
           viewport={{
             once: true,
+            amount: 0.1,
           }}
           transition={{
-            duration: 0.8,
+            duration: 0.4,
           }}
           className="
             relative
@@ -1230,23 +987,19 @@ export default function ProjectDetails() {
             lg:p-14
           "
         >
-
-          {/* Glow */}
-
           <div
             className="
               absolute
-              right-[-100px]
-              top-[-180px]
-              w-[450px]
-              h-[450px]
+              right-[-80px]
+              top-[-120px]
+              w-[300px]
+              h-[300px]
               rounded-full
-              bg-violet-600/[0.05]
-              blur-[130px]
+              bg-violet-600/[0.035]
+              blur-[80px]
               pointer-events-none
             "
           />
-
 
           <div
             className="
@@ -1259,9 +1012,7 @@ export default function ProjectDetails() {
               gap-10
             "
           >
-
             <div>
-
               <p
                 className="
                   font-['Space_Grotesk']
@@ -1288,30 +1039,16 @@ export default function ProjectDetails() {
               >
                 Want to see more of my work?
               </h2>
-
             </div>
 
-
-            <div
-              className="
-                flex
-                flex-wrap
-                gap-3
-              "
-            >
+            <div className="flex flex-wrap gap-3">
 
               {/* GitHub */}
 
-              <motion.a
+              <a
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{
-                  y: -4,
-                }}
-                whileTap={{
-                  scale: 0.97,
-                }}
                 className="
                   group
                   flex
@@ -1328,31 +1065,22 @@ export default function ProjectDetails() {
                   text-gray-400
                   hover:text-white
                   hover:border-violet-400/30
-                  transition-all
+                  transition-colors
                 "
               >
-
                 <FiGithub size={15} />
 
                 GitHub
 
                 <FiArrowUpRight size={13} />
-
-              </motion.a>
-
+              </a>
 
               {/* Live */}
 
-              <motion.a
+              <a
                 href={project.live}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{
-                  y: -4,
-                }}
-                whileTap={{
-                  scale: 0.97,
-                }}
                 className="
                   group
                   flex
@@ -1370,19 +1098,13 @@ export default function ProjectDetails() {
                   transition-colors
                 "
               >
-
                 View Live Project
 
                 <FiExternalLink size={14} />
-
-              </motion.a>
-
+              </a>
             </div>
-
           </div>
-
         </motion.div>
-
 
         {/* =================================================
             FOOTER
@@ -1403,7 +1125,6 @@ export default function ProjectDetails() {
             gap-5
           "
         >
-
           <p
             className="
               font-['Space_Grotesk']
@@ -1415,7 +1136,6 @@ export default function ProjectDetails() {
           >
             © {new Date().getFullYear()} Rohit Singh
           </p>
-
 
           <button
             onClick={() => navigate("/#projects")}
@@ -1432,21 +1152,15 @@ export default function ProjectDetails() {
               transition-colors
             "
           >
-
             All Projects
 
             <FiArrowUpRight size={14} />
-
           </button>
-
         </div>
-
       </div>
-
     </section>
   );
 }
-
 
 /* ==========================================
    INFO CARD
@@ -1470,7 +1184,6 @@ function Info({ label, value, active }) {
         transition-colors
       "
     >
-
       <p
         className="
           font-['Space_Grotesk']
@@ -1483,26 +1196,9 @@ function Info({ label, value, active }) {
         {label}
       </p>
 
-
-      <div
-        className="
-          mt-3
-          flex
-          items-center
-          gap-2.5
-        "
-      >
-
+      <div className="mt-3 flex items-center gap-2.5">
         {active && (
-          <span
-            className="
-              w-1.5
-              h-1.5
-              rounded-full
-              bg-violet-400
-              shadow-[0_0_10px_rgba(167,139,250,0.7)]
-            "
-          />
+          <span className="w-1.5 h-1.5 rounded-full bg-violet-400" />
         )}
 
         <p
@@ -1514,9 +1210,7 @@ function Info({ label, value, active }) {
         >
           {value}
         </p>
-
       </div>
-
     </div>
   );
 }

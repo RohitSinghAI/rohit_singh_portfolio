@@ -26,55 +26,83 @@ const skills = [
 ];
 
 export default function About() {
-  // ==========================================
-  // 3D EFFECT
-  // ==========================================
+  // ------------------------------------------
+  // Mouse movement
+  // ------------------------------------------
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const rotateX = useSpring(
-    useTransform(mouseY, [-0.5, 0.5], [5, -5]),
-    {
-      stiffness: 80,
-      damping: 25,
-    }
+  const smoothX = useSpring(mouseX, {
+    stiffness: 100,
+    damping: 30,
+  });
+
+  const smoothY = useSpring(mouseY, {
+    stiffness: 100,
+    damping: 30,
+  });
+
+  const rotateX = useTransform(
+    smoothY,
+    [-0.5, 0.5],
+    [4, -4]
   );
 
-  const rotateY = useSpring(
-    useTransform(mouseX, [-0.5, 0.5], [-7, 7]),
-    {
-      stiffness: 80,
-      damping: 25,
-    }
+  const rotateY = useTransform(
+    smoothX,
+    [-0.5, 0.5],
+    [-5, 5]
   );
 
-  const imageX = useSpring(
-    useTransform(mouseX, [-0.5, 0.5], [-6, 6]),
-    {
-      stiffness: 70,
-      damping: 20,
-    }
+  const imageX = useTransform(
+    smoothX,
+    [-0.5, 0.5],
+    [-5, 5]
   );
 
-  const imageY = useSpring(
-    useTransform(mouseY, [-0.5, 0.5], [-6, 6]),
-    {
-      stiffness: 70,
-      damping: 20,
-    }
+  const imageY = useTransform(
+    smoothY,
+    [-0.5, 0.5],
+    [-5, 5]
   );
+
+  // ------------------------------------------
+  // Optimized mouse listener
+  // ------------------------------------------
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      mouseX.set(e.clientX / window.innerWidth - 0.5);
-      mouseY.set(e.clientY / window.innerHeight - 0.5);
+    let frameId = null;
+
+    const handleMouseMove = (event) => {
+      if (frameId !== null) return;
+
+      frameId = requestAnimationFrame(() => {
+        mouseX.set(
+          event.clientX / window.innerWidth - 0.5
+        );
+
+        mouseY.set(
+          event.clientY / window.innerHeight - 0.5
+        );
+
+        frameId = null;
+      });
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, {
+      passive: true,
+    });
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener(
+        "mousemove",
+        handleMouseMove
+      );
+
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
+      }
     };
   }, [mouseX, mouseY]);
 
@@ -92,24 +120,22 @@ export default function About() {
         [perspective:1700px]
       "
     >
+      {/* Background */}
+
       <Background />
 
-      {/* ==========================================
-          HERO STYLE VIGNETTE
-      ========================================== */}
+      {/* Vignette */}
 
       <div
         className="
           absolute
           inset-0
           pointer-events-none
-          bg-[radial-gradient(circle_at_center,transparent_20%,#060606_90%)]
+          bg-[radial-gradient(circle_at_center,transparent_25%,#060606_90%)]
         "
       />
 
-      {/* ==========================================
-          MAIN PURPLE GLOW
-      ========================================== */}
+      {/* Purple glow */}
 
       <div
         className="
@@ -117,69 +143,47 @@ export default function About() {
           right-[5%]
           top-1/2
           -translate-y-1/2
-          w-[520px]
-          h-[520px]
+          w-[420px]
+          h-[420px]
           rounded-full
-          bg-violet-500/[0.04]
-          blur-[150px]
+          bg-violet-500/[0.03]
+          blur-[80px]
           pointer-events-none
         "
       />
 
-      {/* ==========================================
-          SECONDARY INDIGO GLOW
-      ========================================== */}
+      {/* Indigo glow */}
 
       <div
         className="
           absolute
-          left-[-180px]
-          bottom-[-180px]
-          w-[450px]
-          h-[450px]
-          rounded-full
-          bg-indigo-500/[0.025]
-          blur-[140px]
-          pointer-events-none
-        "
-      />
-
-      {/* ==========================================
-          TOP LEFT SUBTLE GLOW
-      ========================================== */}
-
-      <div
-        className="
-          absolute
-          left-[15%]
-          top-[-180px]
+          left-[-150px]
+          bottom-[-150px]
           w-[350px]
           h-[350px]
           rounded-full
-          bg-violet-500/[0.018]
-          blur-[120px]
+          bg-indigo-500/[0.02]
+          blur-[70px]
           pointer-events-none
         "
       />
 
-      {/* ==========================================
-          SUBTLE GRID
-      ========================================== */}
+      {/* Grid */}
 
       <div
         className="
           absolute
           inset-0
           pointer-events-none
-          opacity-[0.018]
+          opacity-[0.012]
           bg-[linear-gradient(rgba(255,255,255,.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.5)_1px,transparent_1px)]
           bg-[size:90px_90px]
         "
       />
 
-      {/* ==========================================
-          CONTENT
-      ========================================== */}
+      {/* ------------------------------------------
+          Main content
+      ------------------------------------------ */}
 
       <div
         className="
@@ -192,10 +196,7 @@ export default function About() {
           lg:px-12
         "
       >
-
-        {/* ==========================================
-            TOP HEADER
-        ========================================== */}
+        {/* Header */}
 
         <div
           className="
@@ -207,15 +208,13 @@ export default function About() {
             gap-8
           "
         >
-
-          {/* LEFT TITLE */}
+          {/* Title */}
 
           <div>
-
             <motion.div
               initial={{
                 opacity: 0,
-                x: -20,
+                x: -15,
               }}
               whileInView={{
                 opacity: 1,
@@ -225,7 +224,7 @@ export default function About() {
                 once: true,
               }}
               transition={{
-                duration: 0.7,
+                duration: 0.5,
               }}
               className="
                 flex
@@ -238,9 +237,7 @@ export default function About() {
                 text-violet-400
               "
             >
-              <span>
-                01
-              </span>
+              <span>01</span>
 
               <span
                 className="
@@ -250,13 +247,13 @@ export default function About() {
                 "
               />
 
-              Profile
+              <span>Profile</span>
             </motion.div>
 
             <motion.h2
               initial={{
                 opacity: 0,
-                y: 35,
+                y: 20,
               }}
               whileInView={{
                 opacity: 1,
@@ -266,7 +263,7 @@ export default function About() {
                 once: true,
               }}
               transition={{
-                duration: 0.9,
+                duration: 0.6,
               }}
               className="
                 mt-6
@@ -288,15 +285,14 @@ export default function About() {
                 THE CODE.
               </span>
             </motion.h2>
-
           </div>
 
-          {/* RIGHT INTRO */}
+          {/* Intro */}
 
           <motion.p
             initial={{
               opacity: 0,
-              y: 20,
+              y: 15,
             }}
             whileInView={{
               opacity: 1,
@@ -306,7 +302,7 @@ export default function About() {
               once: true,
             }}
             transition={{
-              delay: 0.25,
+              duration: 0.5,
             }}
             className="
               max-w-sm
@@ -321,12 +317,11 @@ export default function About() {
             mindset and technologies behind
             the work.
           </motion.p>
-
         </div>
 
-        {/* ==========================================
-            PROFILE AREA
-        ========================================== */}
+        {/* ------------------------------------------
+            Profile section
+        ------------------------------------------ */}
 
         <div
           className="
@@ -338,15 +333,12 @@ export default function About() {
             items-center
           "
         >
-
-          {/* ========================================
-              IMAGE
-          ======================================== */}
+          {/* Image */}
 
           <motion.div
             initial={{
               opacity: 0,
-              x: -70,
+              x: -40,
             }}
             whileInView={{
               opacity: 1,
@@ -354,10 +346,10 @@ export default function About() {
             }}
             viewport={{
               once: true,
-              amount: 0.2,
+              amount: 0.15,
             }}
             transition={{
-              duration: 1,
+              duration: 0.6,
             }}
             className="
               relative
@@ -366,7 +358,6 @@ export default function About() {
               lg:justify-start
             "
           >
-
             <motion.div
               style={{
                 rotateX,
@@ -381,12 +372,10 @@ export default function About() {
                 md:w-[370px]
                 md:h-[475px]
                 [transform-style:preserve-3d]
+                will-change-transform
               "
             >
-
-              {/* ========================================
-                  BACK CARD
-              ======================================== */}
+              {/* Back card */}
 
               <div
                 className="
@@ -395,13 +384,11 @@ export default function About() {
                   rounded-[36px]
                   border
                   border-violet-400/[0.12]
-                  [transform:translateZ(-60px)_translateX(24px)_translateY(24px)]
+                  [transform:translateZ(-40px)_translateX(20px)_translateY(20px)]
                 "
               />
 
-              {/* ========================================
-                  MIDDLE CARD
-              ======================================== */}
+              {/* Middle card */}
 
               <div
                 className="
@@ -410,36 +397,24 @@ export default function About() {
                   rounded-[36px]
                   border
                   border-white/[0.06]
-                  [transform:translateZ(-30px)_translateX(12px)_translateY(12px)]
+                  [transform:translateZ(-20px)_translateX(10px)_translateY(10px)]
                 "
               />
 
-              {/* ========================================
-                  IMAGE GLOW
-              ======================================== */}
+              {/* Image glow */}
 
-              <motion.div
-                animate={{
-                  scale: [1, 1.08, 1],
-                  opacity: [0.2, 0.4, 0.2],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                }}
+              <div
                 className="
                   absolute
-                  -inset-16
+                  -inset-8
                   rounded-full
-                  bg-violet-500/[0.05]
-                  blur-[80px]
-                  [transform:translateZ(-100px)]
+                  bg-violet-500/[0.04]
+                  blur-[50px]
+                  pointer-events-none
                 "
               />
 
-              {/* ========================================
-                  MAIN IMAGE
-              ======================================== */}
+              {/* Main image */}
 
               <div
                 className="
@@ -450,23 +425,24 @@ export default function About() {
                   border
                   border-white/[0.12]
                   bg-[#0d0d0f]
-                  shadow-[0_50px_110px_rgba(0,0,0,.8)]
+                  shadow-[0_30px_70px_rgba(0,0,0,.65)]
                   [transform:translateZ(35px)]
                 "
               >
-
                 <motion.img
                   src={profile}
                   alt="Rohit Singh"
+                  loading="lazy"
+                  decoding="async"
                   style={{
                     x: imageX,
                     y: imageY,
                   }}
                   whileHover={{
-                    scale: 1.045,
+                    scale: 1.02,
                   }}
                   transition={{
-                    duration: 0.5,
+                    duration: 0.2,
                   }}
                   className="
                     absolute
@@ -474,10 +450,11 @@ export default function About() {
                     w-full
                     h-full
                     object-cover
+                    will-change-transform
                   "
                 />
 
-                {/* IMAGE OVERLAY */}
+                {/* Overlay */}
 
                 <div
                   className="
@@ -486,13 +463,12 @@ export default function About() {
                     bg-gradient-to-t
                     from-black
                     via-transparent
-                    to-violet-500/[0.07]
+                    to-violet-500/[0.05]
+                    pointer-events-none
                   "
                 />
 
-                {/* ========================================
-                    TOP INFO
-                ======================================== */}
+                {/* Top info */}
 
                 <div
                   className="
@@ -508,7 +484,6 @@ export default function About() {
                     tracking-[3px]
                   "
                 >
-
                   <span className="text-violet-300">
                     RS / 01
                   </span>
@@ -516,12 +491,9 @@ export default function About() {
                   <span className="text-white/25">
                     2026
                   </span>
-
                 </div>
 
-                {/* ========================================
-                    BOTTOM INFO
-                ======================================== */}
+                {/* Bottom info */}
 
                 <div
                   className="
@@ -531,7 +503,6 @@ export default function About() {
                     bottom-7
                   "
                 >
-
                   <div
                     className="
                       text-[8px]
@@ -553,23 +524,12 @@ export default function About() {
                   >
                     Rohit Singh
                   </div>
-
                 </div>
-
               </div>
 
-              {/* ========================================
-                  FLOATING AI
-              ======================================== */}
+              {/* AI label */}
 
-              <motion.div
-                animate={{
-                  y: [0, -8, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                }}
+              <div
                 className="
                   absolute
                   -left-8
@@ -584,20 +544,11 @@ export default function About() {
                 "
               >
                 AI
-              </motion.div>
+              </div>
 
-              {/* ========================================
-                  FLOATING CARD
-              ======================================== */}
+              {/* Learning card */}
 
-              <motion.div
-                animate={{
-                  y: [0, 7, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                }}
+              <div
                 className="
                   absolute
                   -right-8
@@ -609,12 +560,11 @@ export default function About() {
                   rounded-2xl
                   border
                   border-white/[0.08]
-                  bg-[#09090b]/90
-                  backdrop-blur-xl
-                  [transform:translateZ(110px)]
+                  bg-[#09090b]/95
+                  shadow-[0_15px_35px_rgba(0,0,0,.35)]
+                  [transform:translateZ(100px)]
                 "
               >
-
                 <div
                   className="
                     flex
@@ -626,7 +576,6 @@ export default function About() {
                     text-gray-600
                   "
                 >
-
                   <span
                     className="
                       w-1.5
@@ -637,7 +586,6 @@ export default function About() {
                   />
 
                   Currently Learning
-
                 </div>
 
                 <div
@@ -650,21 +598,18 @@ export default function About() {
                 >
                   AI / ML
                 </div>
-
-              </motion.div>
-
+              </div>
             </motion.div>
-
           </motion.div>
 
-          {/* ========================================
-              RIGHT CONTENT
-          ======================================== */}
+          {/* ------------------------------------------
+              Right content
+          ------------------------------------------ */}
 
           <motion.div
             initial={{
               opacity: 0,
-              x: 60,
+              x: 35,
             }}
             whileInView={{
               opacity: 1,
@@ -672,15 +617,12 @@ export default function About() {
             }}
             viewport={{
               once: true,
-              amount: 0.2,
+              amount: 0.15,
             }}
             transition={{
-              duration: 1,
+              duration: 0.6,
             }}
           >
-
-            {/* SMALL TITLE */}
-
             <div
               className="
                 font-['Space_Grotesk']
@@ -692,8 +634,6 @@ export default function About() {
             >
               Who I am
             </div>
-
-            {/* MAIN TITLE */}
 
             <h3
               className="
@@ -723,10 +663,7 @@ export default function About() {
               </span>
             </h3>
 
-            {/* DESCRIPTION */}
-
             <div className="mt-8 space-y-5">
-
               <p
                 className="
                   max-w-xl
@@ -758,15 +695,11 @@ export default function About() {
                 exploring data and training models to
                 building useful digital experiences.
               </p>
-
             </div>
 
-            {/* ========================================
-                SKILLS
-            ======================================== */}
+            {/* Skills */}
 
             <div className="mt-9">
-
               <div
                 className="
                   font-['Space_Grotesk']
@@ -787,26 +720,11 @@ export default function About() {
                   gap-2
                 "
               >
-
-                {skills.map((skill, index) => (
+                {skills.map((skill) => (
                   <motion.div
                     key={skill}
-                    initial={{
-                      opacity: 0,
-                      y: 10,
-                    }}
-                    whileInView={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    viewport={{
-                      once: true,
-                    }}
-                    transition={{
-                      delay: index * 0.07,
-                    }}
                     whileHover={{
-                      y: -3,
+                      y: -2,
                     }}
                     className="
                       px-3
@@ -822,29 +740,26 @@ export default function About() {
                       text-gray-500
                       hover:border-violet-400/30
                       hover:text-violet-300
-                      transition-all
+                      transition-colors
+                      duration-200
                     "
                   >
                     {skill}
                   </motion.div>
                 ))}
-
               </div>
-
             </div>
-
           </motion.div>
-
         </div>
 
-        {/* ==========================================
-            STATS
-        ========================================== */}
+        {/* ------------------------------------------
+            Stats
+        ------------------------------------------ */}
 
         <motion.div
           initial={{
             opacity: 0,
-            y: 30,
+            y: 20,
           }}
           whileInView={{
             opacity: 1,
@@ -854,7 +769,7 @@ export default function About() {
             once: true,
           }}
           transition={{
-            duration: 0.8,
+            duration: 0.5,
           }}
           className="
             mt-20
@@ -869,19 +784,13 @@ export default function About() {
             bg-white/[0.015]
           "
         >
-
           {stats.map((item, index) => (
-            <motion.div
+            <div
               key={item.title}
-              whileHover={{
-                backgroundColor:
-                  "rgba(255,255,255,0.025)",
-              }}
               className={`
                 relative
                 p-6
                 sm:p-8
-                transition-all
 
                 ${
                   index !== stats.length - 1
@@ -896,7 +805,6 @@ export default function About() {
                 }
               `}
             >
-
               <div
                 className="
                   font-['Space_Grotesk']
@@ -930,15 +838,11 @@ export default function About() {
                   bg-violet-400/40
                 "
               />
-
-            </motion.div>
+            </div>
           ))}
-
         </motion.div>
 
-        {/* ==========================================
-            BOTTOM LINE
-        ========================================== */}
+        {/* Bottom line */}
 
         <div
           className="
@@ -955,7 +859,6 @@ export default function About() {
             text-gray-700
           "
         >
-
           <span>
             Data → Intelligence → Experience
           </span>
@@ -963,9 +866,7 @@ export default function About() {
           <span>
             Rohit Singh / 2026
           </span>
-
         </div>
-
       </div>
     </section>
   );

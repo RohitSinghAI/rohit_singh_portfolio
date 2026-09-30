@@ -33,6 +33,13 @@ const socials = [
 ];
 
 export default function Footer() {
+  const handleBackToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <footer
       className="
@@ -43,10 +50,14 @@ export default function Footer() {
         text-white
       "
     >
+      {/* ==========================================
+          BACKGROUND
+      ========================================== */}
+
       <Background />
 
       {/* ==========================================
-          HERO STYLE VIGNETTE
+          LIGHT VIGNETTE
       ========================================== */}
 
       <div
@@ -54,12 +65,12 @@ export default function Footer() {
           absolute
           inset-0
           pointer-events-none
-          bg-[radial-gradient(circle_at_center,transparent_20%,#060606_90%)]
+          bg-[radial-gradient(circle_at_center,transparent_25%,#060606_90%)]
         "
       />
 
       {/* ==========================================
-          HERO PURPLE GLOW
+          PURPLE GLOW
       ========================================== */}
 
       <div
@@ -68,53 +79,53 @@ export default function Footer() {
           right-[5%]
           top-1/2
           -translate-y-1/2
-          w-[520px]
-          h-[520px]
+          w-[400px]
+          h-[400px]
           rounded-full
-          bg-violet-500/[0.04]
-          blur-[150px]
+          bg-violet-500/[0.035]
+          blur-[100px]
           pointer-events-none
         "
       />
 
       {/* ==========================================
-          HERO INDIGO GLOW
+          INDIGO GLOW
       ========================================== */}
 
       <div
         className="
           absolute
-          left-[-180px]
-          bottom-[-180px]
-          w-[450px]
-          h-[450px]
+          left-[-150px]
+          bottom-[-150px]
+          w-[350px]
+          h-[350px]
           rounded-full
-          bg-indigo-500/[0.025]
-          blur-[140px]
+          bg-indigo-500/[0.02]
+          blur-[90px]
           pointer-events-none
         "
       />
 
       {/* ==========================================
-          HERO TOP GLOW
+          TOP GLOW
       ========================================== */}
 
       <div
         className="
           absolute
           left-[15%]
-          top-[-180px]
-          w-[350px]
-          h-[350px]
+          top-[-150px]
+          w-[280px]
+          h-[280px]
           rounded-full
-          bg-violet-500/[0.018]
-          blur-[120px]
+          bg-violet-500/[0.015]
+          blur-[80px]
           pointer-events-none
         "
       />
 
       {/* ==========================================
-          HERO GRID
+          GRID
       ========================================== */}
 
       <div
@@ -122,14 +133,14 @@ export default function Footer() {
           absolute
           inset-0
           pointer-events-none
-          opacity-[0.018]
+          opacity-[0.012]
           bg-[linear-gradient(rgba(255,255,255,.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.5)_1px,transparent_1px)]
           bg-[size:90px_90px]
         "
       />
 
       {/* ==========================================
-          ROHIT BACKGROUND WATERMARK
+          ROHIT WATERMARK
       ========================================== */}
 
       <div
@@ -147,7 +158,7 @@ export default function Footer() {
         <motion.span
           initial={{
             opacity: 0,
-            y: 40,
+            y: 20,
           }}
           whileInView={{
             opacity: 1,
@@ -155,10 +166,10 @@ export default function Footer() {
           }}
           viewport={{
             once: true,
+            amount: 0.1,
           }}
           transition={{
-            duration: 1.2,
-            ease: "easeOut",
+            duration: 0.5,
           }}
           className="
             font-['Space_Grotesk']
@@ -215,14 +226,12 @@ export default function Footer() {
           "
         >
 
-          {/* ==========================================
-              LABEL
-          ========================================== */}
+          {/* LABEL */}
 
           <motion.div
             initial={{
               opacity: 0,
-              y: 15,
+              y: 10,
             }}
             whileInView={{
               opacity: 1,
@@ -230,9 +239,10 @@ export default function Footer() {
             }}
             viewport={{
               once: true,
+              amount: 0.2,
             }}
             transition={{
-              duration: 0.6,
+              duration: 0.35,
             }}
             className="
               flex
@@ -253,14 +263,12 @@ export default function Footer() {
             <span className="w-8 h-px bg-white/20" />
           </motion.div>
 
-          {/* ==========================================
-              MAIN HEADING
-          ========================================== */}
+          {/* MAIN HEADING */}
 
           <motion.h2
             initial={{
               opacity: 0,
-              y: 60,
+              y: 25,
             }}
             whileInView={{
               opacity: 1,
@@ -268,10 +276,11 @@ export default function Footer() {
             }}
             viewport={{
               once: true,
+              amount: 0.2,
             }}
             transition={{
-              duration: 0.9,
-              delay: 0.1,
+              duration: 0.45,
+              delay: 0.05,
             }}
             className="
               mt-8
@@ -294,14 +303,12 @@ export default function Footer() {
             </span>
           </motion.h2>
 
-          {/* ==========================================
-              DESCRIPTION
-          ========================================== */}
+          {/* DESCRIPTION */}
 
           <motion.p
             initial={{
               opacity: 0,
-              y: 20,
+              y: 15,
             }}
             whileInView={{
               opacity: 1,
@@ -309,10 +316,11 @@ export default function Footer() {
             }}
             viewport={{
               once: true,
+              amount: 0.2,
             }}
             transition={{
-              duration: 0.7,
-              delay: 0.3,
+              duration: 0.4,
+              delay: 0.1,
             }}
             className="
               mx-auto
@@ -329,9 +337,7 @@ export default function Footer() {
             something meaningful.
           </motion.p>
 
-          {/* ==========================================
-              EMAIL BUTTON
-          ========================================== */}
+          {/* EMAIL BUTTON */}
 
           <motion.a
             href="https://mail.google.com/mail/?view=cm&fs=1&to=rk6109744@gmail.com"
@@ -339,65 +345,60 @@ export default function Footer() {
             rel="noopener noreferrer"
             initial={{
               opacity: 0,
-              scale: 0.95,
+              y: 15,
             }}
             whileInView={{
               opacity: 1,
-              scale: 1,
+              y: 0,
             }}
             viewport={{
               once: true,
+              amount: 0.2,
             }}
             transition={{
-              duration: 0.7,
-              delay: 0.45,
-            }}
-            whileHover={{
-              y: -5,
+              duration: 0.4,
+              delay: 0.15,
             }}
             className="
-    group
-    inline-flex
-    items-center
-    gap-4
-    mt-9
-    px-6
-    py-3
-    rounded-full
-    border
-    border-white/[0.09]
-    bg-white/[0.025]
-    backdrop-blur-xl
-    font-['Space_Grotesk']
-    text-sm
-    text-gray-300
-    hover:border-violet-400/30
-    hover:text-white
-    transition-all
-    duration-300
-  "
+              group
+              inline-flex
+              items-center
+              gap-4
+              mt-9
+              px-6
+              py-3
+              rounded-full
+              border
+              border-white/[0.09]
+              bg-white/[0.025]
+              font-['Space_Grotesk']
+              text-sm
+              text-gray-300
+              hover:border-violet-400/30
+              hover:text-white
+              transition-colors
+            "
           >
             rk6109744@gmail.com
 
             <span
               className="
-      flex
-      items-center
-      justify-center
-      w-8
-      h-8
-      rounded-full
-      bg-white
-      text-black
-      transition-transform
-      duration-300
-      group-hover:rotate-45
-    "
+                flex
+                items-center
+                justify-center
+                w-8
+                h-8
+                rounded-full
+                bg-white
+                text-black
+                transition-transform
+                duration-200
+                group-hover:rotate-45
+              "
             >
               <FiArrowUpRight size={15} />
             </span>
           </motion.a>
-
         </div>
 
         {/* ==========================================
@@ -443,12 +444,11 @@ export default function Footer() {
               sm:gap-5
             "
           >
-
-            {socials.map((social, index) => {
+            {socials.map((social) => {
               const Icon = social.icon;
 
               return (
-                <motion.a
+                <a
                   key={social.name}
                   href={social.href}
                   target={
@@ -461,24 +461,8 @@ export default function Footer() {
                       ? undefined
                       : "noopener noreferrer"
                   }
-                  initial={{
-                    opacity: 0,
-                    y: 10,
-                  }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  viewport={{
-                    once: true,
-                  }}
-                  transition={{
-                    delay: index * 0.08,
-                  }}
-                  whileHover={{
-                    y: -3,
-                  }}
                   className="
+                    group
                     flex
                     items-center
                     gap-2
@@ -491,10 +475,9 @@ export default function Footer() {
                     hover:bg-white/[0.025]
                     text-gray-600
                     hover:text-white
-                    transition-all
+                    transition-colors
                   "
                 >
-
                   <Icon size={13} />
 
                   <span
@@ -505,13 +488,10 @@ export default function Footer() {
                   >
                     {social.name}
                   </span>
-
-                </motion.a>
+                </a>
               );
             })}
-
           </div>
-
         </div>
 
         {/* ==========================================
@@ -560,19 +540,8 @@ export default function Footer() {
 
           {/* BACK TO TOP */}
 
-          <motion.button
-            whileHover={{
-              y: -3,
-            }}
-            whileTap={{
-              scale: 0.95,
-            }}
-            onClick={() =>
-              window.scrollTo({
-                top: 0,
-                behavior: "smooth",
-              })
-            }
+          <button
+            onClick={handleBackToTop}
             className="
               group
               flex
@@ -600,16 +569,14 @@ export default function Footer() {
                 border
                 border-white/[0.08]
                 group-hover:border-violet-400/30
-                transition-all
+                transition-colors
               "
             >
               ↑
             </span>
-
-          </motion.button>
+          </button>
 
         </div>
-
       </div>
     </footer>
   );
