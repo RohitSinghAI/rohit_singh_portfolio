@@ -5,75 +5,76 @@ import {
   useTransform,
 } from "framer-motion";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
 import Background from "../ui/Background";
 import profile from "../../assets/image/profile.png";
 
 export default function Hero() {
-  const navigate = useNavigate();
-
   // ==========================================
-  // 3D MOUSE PARALLAX
+  // SMOOTH MOUSE PARALLAX
   // ==========================================
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
   const smoothX = useSpring(mouseX, {
-    stiffness: 80,
-    damping: 25,
+    stiffness: 100,
+    damping: 30,
+    mass: 0.5,
   });
 
   const smoothY = useSpring(mouseY, {
-    stiffness: 80,
-    damping: 25,
+    stiffness: 100,
+    damping: 30,
+    mass: 0.5,
   });
 
-  const rotateX = useSpring(
-    useTransform(smoothY, [-0.5, 0.5], [6, -6]),
-    {
-      stiffness: 80,
-      damping: 25,
-    }
-  );
+  const rotateX = useTransform(smoothY, [-0.5, 0.5], [5, -5]);
+  const rotateY = useTransform(smoothX, [-0.5, 0.5], [-6, 6]);
 
-  const rotateY = useSpring(
-    useTransform(smoothX, [-0.5, 0.5], [-8, 8]),
-    {
-      stiffness: 80,
-      damping: 25,
-    }
-  );
+  const imageX = useTransform(smoothX, [-0.5, 0.5], [-8, 8]);
+  const imageY = useTransform(smoothY, [-0.5, 0.5], [-8, 8]);
 
-  const imageX = useSpring(
-    useTransform(smoothX, [-0.5, 0.5], [-10, 10]),
-    {
-      stiffness: 70,
-      damping: 22,
-    }
-  );
-
-  const imageY = useSpring(
-    useTransform(smoothY, [-0.5, 0.5], [-10, 10]),
-    {
-      stiffness: 70,
-      damping: 22,
-    }
-  );
+  // ==========================================
+  // OPTIMIZED MOUSE MOVE
+  // ==========================================
 
   useEffect(() => {
+    let animationFrame = null;
+
     const handleMouseMove = (e) => {
-      mouseX.set(e.clientX / window.innerWidth - 0.5);
-      mouseY.set(e.clientY / window.innerHeight - 0.5);
+      if (animationFrame !== null) return;
+
+      animationFrame = requestAnimationFrame(() => {
+        mouseX.set(e.clientX / window.innerWidth - 0.5);
+        mouseY.set(e.clientY / window.innerHeight - 0.5);
+
+        animationFrame = null;
+      });
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, {
+      passive: true,
+    });
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+
+      if (animationFrame !== null) {
+        cancelAnimationFrame(animationFrame);
+      }
     };
   }, [mouseX, mouseY]);
+
+  // ==========================================
+  // SCROLL HELPERS
+  // ==========================================
+
+  const scrollToSection = (id) => {
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
 
   return (
     <section
@@ -86,9 +87,13 @@ export default function Hero() {
         text-white
         flex
         items-center
-        [perspective:1600px]
+        [perspective:1400px]
       "
     >
+      {/* ==========================================
+          BACKGROUND
+      ========================================== */}
+
       <Background />
 
       {/* ==========================================
@@ -101,11 +106,11 @@ export default function Hero() {
           right-[5%]
           top-1/2
           -translate-y-1/2
-          w-[500px]
-          h-[500px]
+          w-[420px]
+          h-[420px]
           rounded-full
-          bg-violet-500/[0.04]
-          blur-[150px]
+          bg-violet-500/[0.035]
+          blur-[80px]
           pointer-events-none
         "
       />
@@ -113,13 +118,13 @@ export default function Hero() {
       <div
         className="
           absolute
-          left-[-200px]
-          bottom-[-200px]
-          w-[450px]
-          h-[450px]
+          left-[-150px]
+          bottom-[-150px]
+          w-[350px]
+          h-[350px]
           rounded-full
-          bg-indigo-500/[0.025]
-          blur-[140px]
+          bg-indigo-500/[0.02]
+          blur-[70px]
           pointer-events-none
         "
       />
@@ -133,7 +138,7 @@ export default function Hero() {
           absolute
           inset-0
           pointer-events-none
-          opacity-[0.018]
+          opacity-[0.012]
           bg-[linear-gradient(rgba(255,255,255,.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.5)_1px,transparent_1px)]
           bg-[size:90px_90px]
         "
@@ -148,7 +153,7 @@ export default function Hero() {
           absolute
           inset-0
           pointer-events-none
-          bg-[radial-gradient(circle_at_center,transparent_25%,#060606_90%)]
+          bg-[radial-gradient(circle_at_center,transparent_30%,#060606_90%)]
         "
       />
 
@@ -166,7 +171,8 @@ export default function Hero() {
           px-6
           sm:px-8
           lg:px-12
-          py-28
+          py-24
+          lg:py-28
         "
       >
         <div
@@ -174,29 +180,23 @@ export default function Hero() {
             grid
             lg:grid-cols-[1fr_0.9fr]
             items-center
-            gap-16
-            lg:gap-24
+            gap-14
+            lg:gap-20
           "
         >
           {/* ==========================================
-              LEFT
+              LEFT CONTENT
           ========================================== */}
 
           <div>
-
             {/* STATUS */}
 
             <motion.div
-              initial={{
-                opacity: 0,
-                x: -20,
-              }}
-              animate={{
-                opacity: 1,
-                x: 0,
-              }}
+              initial={{ opacity: 0, x: -15 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{
-                duration: 0.7,
+                duration: 0.5,
+                ease: "easeOut",
               }}
               className="
                 flex
@@ -217,7 +217,7 @@ export default function Hero() {
                     w-full
                     rounded-full
                     bg-violet-400
-                    opacity-50
+                    opacity-40
                     animate-ping
                   "
                 />
@@ -236,22 +236,14 @@ export default function Hero() {
               Hello, I'm Rohit
             </motion.div>
 
-            {/* ==========================================
-                HEADING
-            ========================================== */}
+            {/* HEADING */}
 
             <motion.h1
-              initial={{
-                opacity: 0,
-                y: 45,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{
-                duration: 0.9,
-                delay: 0.15,
+                duration: 0.7,
+                delay: 0.1,
                 ease: [0.22, 1, 0.36, 1],
               }}
               className="
@@ -291,15 +283,11 @@ export default function Hero() {
             {/* LINE */}
 
             <motion.div
-              initial={{
-                width: 0,
-              }}
-              animate={{
-                width: 100,
-              }}
+              initial={{ width: 0 }}
+              animate={{ width: 100 }}
               transition={{
-                delay: 0.8,
-                duration: 0.7,
+                delay: 0.6,
+                duration: 0.5,
               }}
               className="
                 mt-8
@@ -313,16 +301,11 @@ export default function Hero() {
             {/* NAME */}
 
             <motion.div
-              initial={{
-                opacity: 0,
-                y: 20,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{
-                delay: 0.85,
+                delay: 0.65,
+                duration: 0.5,
               }}
               className="
                 mt-6
@@ -356,16 +339,11 @@ export default function Hero() {
             {/* DESCRIPTION */}
 
             <motion.p
-              initial={{
-                opacity: 0,
-                y: 20,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{
-                delay: 1,
+                delay: 0.75,
+                duration: 0.5,
               }}
               className="
                 mt-6
@@ -381,21 +359,14 @@ export default function Hero() {
               experiences powered by AI.
             </motion.p>
 
-            {/* ==========================================
-                BUTTONS
-            ========================================== */}
+            {/* BUTTONS */}
 
             <motion.div
-              initial={{
-                opacity: 0,
-                y: 20,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{
-                delay: 1.15,
+                delay: 0.85,
+                duration: 0.5,
               }}
               className="
                 mt-8
@@ -404,21 +375,10 @@ export default function Hero() {
                 gap-3
               "
             >
-              <motion.button
-                whileHover={{
-                  y: -4,
-                  scale: 1.03,
-                }}
-                whileTap={{
-                  scale: 0.97,
-                }}
-                onClick={() => {
-                  document
-                    .getElementById("projects")
-                    ?.scrollIntoView({
-                      behavior: "smooth",
-                    });
-                }}
+              {/* PROJECT BUTTON */}
+
+              <button
+                onClick={() => scrollToSection("projects")}
                 className="
                   group
                   relative
@@ -431,7 +391,11 @@ export default function Hero() {
                   font-['Space_Grotesk']
                   text-xs
                   font-semibold
-                  shadow-[0_15px_40px_rgba(255,255,255,.06)]
+                  shadow-[0_10px_30px_rgba(255,255,255,.05)]
+                  transition-transform
+                  duration-200
+                  hover:-translate-y-1
+                  active:scale-95
                 "
               >
                 <span className="relative z-10">
@@ -441,6 +405,7 @@ export default function Hero() {
                       ml-2
                       inline-block
                       transition-transform
+                      duration-200
                       group-hover:translate-x-1
                     "
                   >
@@ -455,28 +420,16 @@ export default function Hero() {
                     bg-violet-200
                     -translate-x-full
                     transition-transform
-                    duration-500
+                    duration-300
                     group-hover:translate-x-0
                   "
                 />
-              </motion.button>
+              </button>
 
-              <motion.button
-                whileHover={{
-                  y: -4,
-                  borderColor: "rgba(167,139,250,.5)",
-                  color: "#c4b5fd",
-                }}
-                whileTap={{
-                  scale: 0.97,
-                }}
-                onClick={() => {
-                  document
-                    .getElementById("about")
-                    ?.scrollIntoView({
-                      behavior: "smooth",
-                    });
-                }}
+              {/* ABOUT BUTTON */}
+
+              <button
+                onClick={() => scrollToSection("about")}
                 className="
                   px-7
                   py-3.5
@@ -484,31 +437,30 @@ export default function Hero() {
                   border
                   border-white/[0.09]
                   bg-white/[0.015]
-                  backdrop-blur-md
                   text-gray-500
                   font-['Space_Grotesk']
                   text-xs
                   font-semibold
                   transition-all
+                  duration-200
+                  hover:-translate-y-1
+                  hover:border-violet-400/40
+                  hover:text-violet-300
+                  active:scale-95
                 "
               >
                 About Me
-              </motion.button>
+              </button>
             </motion.div>
 
-            {/* ==========================================
-                TECH
-            ========================================== */}
+            {/* TECH */}
 
             <motion.div
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{
-                delay: 1.35,
+                delay: 1,
+                duration: 0.5,
               }}
               className="
                 mt-11
@@ -531,7 +483,7 @@ export default function Hero() {
           </div>
 
           {/* ==========================================
-              RIGHT
+              RIGHT / PROFILE
           ========================================== */}
 
           <div
@@ -549,15 +501,15 @@ export default function Hero() {
               }}
               initial={{
                 opacity: 0,
-                scale: 0.78,
+                scale: 0.85,
               }}
               animate={{
                 opacity: 1,
                 scale: 1,
               }}
               transition={{
-                duration: 1.1,
-                delay: 0.25,
+                duration: 0.8,
+                delay: 0.15,
                 ease: [0.22, 1, 0.36, 1],
               }}
               className="
@@ -571,53 +523,38 @@ export default function Hero() {
                 lg:w-[410px]
                 lg:h-[410px]
                 [transform-style:preserve-3d]
+                will-change-transform
               "
             >
-
-              {/* ========================================
+              {/* ==========================================
                   BACK GLOW
-              ======================================== */}
+              ========================================== */}
 
-              <motion.div
-                animate={{
-                  scale: [1, 1.08, 1],
-                  opacity: [0.35, 0.55, 0.35],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
+              <div
                 className="
                   absolute
-                  -inset-16
+                  -inset-12
                   rounded-full
-                  bg-violet-500/[0.055]
-                  blur-[90px]
-                  [transform:translateZ(-120px)]
+                  bg-violet-500/[0.045]
+                  blur-[60px]
+                  [transform:translateZ(-80px)]
+                  pointer-events-none
                 "
               />
 
-              {/* ========================================
+              {/* ==========================================
                   OUTER RING
-              ======================================== */}
+              ========================================== */}
 
-              <motion.div
-                animate={{
-                  rotateZ: 360,
-                }}
-                transition={{
-                  duration: 28,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
+              <div
                 className="
                   absolute
                   -inset-10
                   rounded-full
                   border
                   border-violet-400/[0.09]
-                  [transform:translateZ(-60px)]
+                  [transform:translateZ(-50px)]
+                  pointer-events-none
                 "
               >
                 <span
@@ -629,31 +566,24 @@ export default function Hero() {
                     h-2
                     rounded-full
                     bg-violet-400
-                    shadow-[0_0_20px_rgba(167,139,250,.9)]
+                    shadow-[0_0_15px_rgba(167,139,250,.7)]
                   "
                 />
-              </motion.div>
+              </div>
 
-              {/* ========================================
+              {/* ==========================================
                   SECOND RING
-              ======================================== */}
+              ========================================== */}
 
-              <motion.div
-                animate={{
-                  rotateZ: -360,
-                }}
-                transition={{
-                  duration: 20,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
+              <div
                 className="
                   absolute
                   -inset-5
                   rounded-full
                   border
                   border-white/[0.07]
-                  [transform:translateZ(-35px)]
+                  [transform:translateZ(-30px)]
+                  pointer-events-none
                 "
               >
                 <span
@@ -667,11 +597,11 @@ export default function Hero() {
                     bg-white/40
                   "
                 />
-              </motion.div>
+              </div>
 
-              {/* ========================================
+              {/* ==========================================
                   IMAGE
-              ======================================== */}
+              ========================================== */}
 
               <div
                 className="
@@ -682,22 +612,25 @@ export default function Hero() {
                   border
                   border-white/[0.13]
                   bg-[#0d0d0f]
-                  shadow-[0_45px_110px_rgba(0,0,0,.8)]
+                  shadow-[0_30px_70px_rgba(0,0,0,.7)]
                   [transform:translateZ(35px)]
+                  will-change-transform
                 "
               >
                 <motion.img
                   src={profile}
                   alt="Rohit Singh"
+                  loading="eager"
+                  decoding="async"
                   style={{
                     x: imageX,
                     y: imageY,
                   }}
                   whileHover={{
-                    scale: 1.055,
+                    scale: 1.03,
                   }}
                   transition={{
-                    duration: 0.5,
+                    duration: 0.25,
                   }}
                   className="
                     absolute
@@ -705,6 +638,7 @@ export default function Hero() {
                     w-full
                     h-full
                     object-cover
+                    will-change-transform
                   "
                 />
 
@@ -715,42 +649,36 @@ export default function Hero() {
                     absolute
                     inset-0
                     bg-gradient-to-br
-                    from-violet-500/[0.1]
+                    from-violet-500/[0.08]
                     via-transparent
-                    to-black/40
+                    to-black/30
+                    pointer-events-none
                   "
                 />
 
                 {/* SHINE */}
 
-                <motion.div
-                  animate={{
-                    x: ["-130%", "130%"],
-                  }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    repeatDelay: 4,
-                    ease: "easeInOut",
-                  }}
+                <div
                   className="
                     absolute
                     top-0
                     left-0
-                    w-[35%]
+                    w-[30%]
                     h-full
                     skew-x-[-18deg]
                     bg-gradient-to-r
                     from-transparent
-                    via-white/[0.09]
+                    via-white/[0.07]
                     to-transparent
+                    pointer-events-none
+                    animate-[shine_7s_ease-in-out_infinite]
                   "
                 />
               </div>
 
-              {/* ========================================
+              {/* ==========================================
                   INNER RING
-              ======================================== */}
+              ========================================== */}
 
               <div
                 className="
@@ -764,19 +692,11 @@ export default function Hero() {
                 "
               />
 
-              {/* ========================================
+              {/* ==========================================
                   AI TEXT
-              ======================================== */}
+              ========================================== */}
 
-              <motion.div
-                animate={{
-                  y: [0, -9, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
+              <div
                 className="
                   absolute
                   -left-10
@@ -785,26 +705,19 @@ export default function Hero() {
                   text-4xl
                   font-bold
                   tracking-[-2px]
-                  text-violet-400/[0.17]
+                  text-violet-400/[0.15]
                   [transform:translateZ(100px)]
+                  pointer-events-none
                 "
               >
                 AI
-              </motion.div>
+              </div>
 
-              {/* ========================================
+              {/* ==========================================
                   GLASS CARD
-              ======================================== */}
+              ========================================== */}
 
-              <motion.div
-                animate={{
-                  y: [0, 8, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
+              <div
                 className="
                   absolute
                   -right-8
@@ -816,9 +729,8 @@ export default function Hero() {
                   rounded-2xl
                   border
                   border-white/[0.09]
-                  bg-[#09090b]/85
-                  backdrop-blur-xl
-                  shadow-[0_20px_50px_rgba(0,0,0,.45)]
+                  bg-[#09090b]/90
+                  shadow-[0_15px_40px_rgba(0,0,0,.4)]
                   [transform:translateZ(110px)]
                 "
               >
@@ -839,7 +751,7 @@ export default function Hero() {
                       h-1.5
                       rounded-full
                       bg-violet-400
-                      shadow-[0_0_10px_rgba(167,139,250,.8)]
+                      shadow-[0_0_8px_rgba(167,139,250,.7)]
                     "
                   />
 
@@ -856,21 +768,13 @@ export default function Hero() {
                 >
                   AI + ML
                 </div>
-              </motion.div>
+              </div>
 
-              {/* ========================================
+              {/* ==========================================
                   FLOATING DOT
-              ======================================== */}
+              ========================================== */}
 
-              <motion.div
-                animate={{
-                  scale: [1, 1.35, 1],
-                  opacity: [0.4, 1, 0.4],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                }}
+              <div
                 className="
                   absolute
                   -right-3
@@ -879,23 +783,18 @@ export default function Hero() {
                   h-3
                   rounded-full
                   bg-violet-400
-                  shadow-[0_0_25px_rgba(167,139,250,.9)]
+                  shadow-[0_0_18px_rgba(167,139,250,.7)]
                   [transform:translateZ(130px)]
+                  pointer-events-none
+                  animate-pulse
                 "
               />
 
-              {/* ========================================
+              {/* ==========================================
                   SMALL LABEL
-              ======================================== */}
+              ========================================== */}
 
-              <motion.div
-                animate={{
-                  y: [0, -5, 0],
-                }}
-                transition={{
-                  duration: 3.5,
-                  repeat: Infinity,
-                }}
+              <div
                 className="
                   absolute
                   -left-3
@@ -907,8 +806,7 @@ export default function Hero() {
                   rounded-lg
                   border
                   border-white/[0.06]
-                  bg-black/40
-                  backdrop-blur-md
+                  bg-black/50
                   font-['Space_Grotesk']
                   text-[7px]
                   uppercase
@@ -918,7 +816,7 @@ export default function Hero() {
                 "
               >
                 Data → Intelligence
-              </motion.div>
+              </div>
             </motion.div>
           </div>
         </div>
@@ -929,14 +827,11 @@ export default function Hero() {
       ========================================== */}
 
       <motion.div
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{
-          delay: 1.7,
+          delay: 1.3,
+          duration: 0.5,
         }}
         className="
           absolute
@@ -956,23 +851,45 @@ export default function Hero() {
       >
         <span>Scroll</span>
 
-        <motion.div
-          animate={{
-            height: [15, 28, 15],
-            opacity: [0.25, 0.8, 0.25],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-          }}
+        <div
           className="
             w-px
+            h-5
             bg-gradient-to-b
             from-violet-400
             to-transparent
+            opacity-50
           "
         />
       </motion.div>
+
+      {/* ==========================================
+          SHINE KEYFRAME
+      ========================================== */}
+
+      <style>{`
+        @keyframes shine {
+          0% {
+            transform: translateX(-350%) skewX(-18deg);
+          }
+
+          45%,
+          100% {
+            transform: translateX(450%) skewX(-18deg);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          *,
+          *::before,
+          *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
