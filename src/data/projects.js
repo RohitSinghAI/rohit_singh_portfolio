@@ -32,7 +32,7 @@ export const projects = [
     ],
 
     github:
-      "https://github.com/Rohit-kushwah69/House-Price-Prediction",
+      "https://github.com/rohitsinghai/House-Price-Prediction",
 
     live:
       "https://house-price-prediction-alpha-three.vercel.app/",

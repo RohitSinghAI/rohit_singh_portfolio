@@ -9,12 +9,12 @@ import {
 const socials = [
   {
     name: "GitHub",
-    href: "https://github.com/Rohit-kushwah69",
+    href: "https://github.com/rohitsinghai",
     icon: FiGithub,
   },
   {
     name: "LinkedIn",
-    href: "https://www.linkedin.com/in/rohit-kushwah-3512b0301/",
+    href: "https://www.linkedin.com/in/rohitsingh-ai",
     icon: FiLinkedin,
   },
   {
